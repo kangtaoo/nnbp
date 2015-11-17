@@ -7,6 +7,8 @@
 import math
 import random
 import string
+import os
+import utils
 
 random.seed(0)
 
@@ -58,7 +60,7 @@ class NN:
 
     def update(self, inputs):
         if len(inputs) != self.ni-1:
-            raise ValueError('wrong number of inputs')
+            raise ValueError('wrong number of inputs: expecting {0}, got {1}'.format(self.ni-1, len(inputs)))
 
         # input activations
         for i in range(self.ni-1):
@@ -126,6 +128,9 @@ class NN:
         for p in patterns:
             print(p[0], '->', self.update(p[0]))
 
+    def test_one(self, pattern):
+        return self.update(pattern)
+
     def weights(self):
         print('Input weights:')
         for i in range(self.ni):
@@ -165,7 +170,58 @@ def demo():
     # test it
     n.test(pat)
 
+def output_nodes(n):
+    output = [0,0,0,0,0,0,0,0,0,0]
+    output[n] = 1
+    return output
+
+def which_number(output_nodes):
+    max = -1
+    ret = 0
+    i = 0
+    for y in output_nodes:
+        if y > max:
+            max = y
+            ret = i
+        i = i+1
+    return ret
+
+def mnist_demo():
+    nn = NN(784, 2, 10)
+    
+    training_set = []
+    with open(utils.datafile('mnist-train.csv'), 'r') as training_data:
+        i = 1 # line counter
+        for line in training_data:
+            if i > 10:
+                break
+            i = i + 1
+
+            list = map(int, line.split(','))
+            target = output_nodes(list.pop(0))
+            training_set.append([list, target])
+    
+    nn.train(training_set)
+    #nn.test(training_set)
+    #return
+
+    i = 1
+    with open(utils.datafile('mnist-test.csv'), 'r') as testing_data:
+        for line in testing_data:
+            if i > 100:
+                break
+            i = i + 1
+            
+            list = map(int, line.split(','))
+            target = output_nodes(list.pop(0))
+            target_num = which_number(target)
+            result = nn.test_one(list)
+            result_num = which_number(result)
+            correct = target_num == result_num
+            print 'target:{0}, result:{1}, {2}'.format(target_num, result_num, correct)
 
 
 if __name__ == '__main__':
-    demo()
+    #demo()
+    mnist_demo()
+
