@@ -101,7 +101,8 @@ class NN:
             for k in range(self.no):
                 error = error + output_deltas[k]*self.wo[j][k]
             hidden_deltas[j] = dsigmoid(self.ah[j]) * error
-
+	#####
+	######Below code need to change the the L2 Regularization Term
         # update output weights
         for j in range(self.nh):
             for k in range(self.no):
