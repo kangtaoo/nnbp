@@ -23,10 +23,12 @@ def makeMatrix(I, J, fill=0.0):
         m.append([fill]*J)
     return m
 
+# need to use inverse tangent as transfer function math.atan(x)
 # our sigmoid function, tanh is a little nicer than the standard 1/(1+e^-x)
 def sigmoid(x):
     return math.tanh(x)
 
+# derivative of inverse tangent 1/(1 + x**2) need to write it in terms of output y
 # derivative of our sigmoid function, in terms of the output (i.e. y)
 def dsigmoid(y):
     return 1.0 - y**2
