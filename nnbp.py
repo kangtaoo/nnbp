@@ -181,12 +181,10 @@ def output_nodes(n):
 def which_number(output_nodes):
     max = -1
     ret = 0
-    i = 0
-    for y in output_nodes:
+    for i, y in enumerate(output_nodes):
         if y > max:
             max = y
             ret = i
-        i = i+1
     return ret
 
 def mnist_demo():
@@ -194,12 +192,8 @@ def mnist_demo():
     
     training_set = []
     with open(utils.datafile('mnist-train.csv'), 'r') as training_data:
-        i = 1 # line counter
-        for line in training_data:
-            if i > 10:
-                break
-            i = i + 1
-
+        for i, line in enumerate(training_data,1):
+            if i > 10: break
             list = map(int, line.split(','))
             target = output_nodes(list.pop(0))
             training_set.append([list, target])
@@ -208,13 +202,9 @@ def mnist_demo():
     #nn.test(training_set)
     #return
 
-    i = 1
     with open(utils.datafile('mnist-test.csv'), 'r') as testing_data:
-        for line in testing_data:
-            if i > 100:
-                break
-            i = i + 1
-            
+        for i, line in enumerate(testing_data,1):
+            if i > 100: break
             list = map(int, line.split(','))
             target = output_nodes(list.pop(0))
             target_num = which_number(target)
