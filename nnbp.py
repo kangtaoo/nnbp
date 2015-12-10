@@ -206,7 +206,7 @@ def mnist_demo():
     nn.train(training_set)
     #nn.test(training_set)
     #return
-
+    cnt = 0
     with open(datafile('mnist-test.csv'), 'r') as testing_data:
         for i, line in enumerate(testing_data,1):
             if i > 100: break
@@ -216,8 +216,12 @@ def mnist_demo():
             result = nn.test_one(_list)
             result_num = which_number(result)
             correct = target_num == result_num
+            if target_num == result_num:
+                cnt = cnt + 1
+            else:
+                cnt = cnt
             print 'target:{0}, result:{1}, {2}'.format(target_num, result_num, correct)
-
+        print float(cnt)/i
 
 if __name__ == '__main__':
     #demo()
