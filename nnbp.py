@@ -29,14 +29,14 @@ def makeMatrix(I, J, fill=0.0):
 # need to use inverse tangent as transfer function math.atan(x)
 # our sigmoid function, tanh is a little nicer than the standard 1/(1+e^-x)
 def sigmoid(x):
-    return math.tanh(x)
-    #return math.atan(x)
+    # return math.tanh(x)
+    return math.atan(x)
 
 # derivative of inverse tangent 1/(1 + x**2) need to write it in terms of output y
 # derivative of our sigmoid function, in terms of the output (i.e. y)
 def dsigmoid(y):
-    return 1.0 - y**2
-    #return 1/(1+y**2)
+    # return 1.0 - y**2
+    return 1/(1+math.tan(y)**2)
 
 class NN:
     def __init__(self, ni, nh, no):
@@ -148,7 +148,7 @@ class NN:
         for j in xrange(self.nh):
             print(self.wo[j])
 
-    def train(self, patterns, iterations=1000, N=0.5, M=0.1):
+    def train(self, patterns, iterations=1000, N=0.3, M=0.1):
         # N: learning rate
         # M: momentum factor
         for i in xrange(iterations):
@@ -193,12 +193,12 @@ def which_number(output_nodes):
     return ret
 
 def mnist_demo():
-    nn = NN(784, 2, 10)
+    nn = NN(784, 10, 10)
     
     training_set = []
     with open(datafile('mnist-train.csv'), 'r') as training_data:
         for i, line in enumerate(training_data,1):
-            if i > 100: break
+            if i > 1000: break
             _list = map(int, line.split(','))
             target = output_nodes(_list.pop(0))
             training_set.append([_list, target])
